@@ -1,6 +1,9 @@
 // Columnar Visualizer component - property-based columnar layout
 import { Component, onMount, createEffect, onCleanup, createSignal } from 'solid-js';
 import { GraphData, GraphNode, GraphEdge, Point, FilterState, HighlightState } from '../../types';
+import { getThemeColors } from '../../utils/themeUtils';
+import { screenToWorld, worldToScreen, getMousePos, Transform as TransformUtil } from '../../utils/coordinateUtils';
+import { getNodeAtPosition } from '../../utils/nodeUtils';
 import styles from './ColumnarVisualizer.module.css';
 
 export interface ColumnarVisualizerProps {
@@ -19,6 +22,8 @@ interface Transform {
 const ColumnarVisualizer: Component<ColumnarVisualizerProps> = (props) => {
   let canvasRef: HTMLCanvasElement | undefined;
   let animationFrameId: number;
+
+
   
   // Canvas transformation state
   let transform: Transform = { x: 50, y: 50, scale: 0.65 };
@@ -35,31 +40,7 @@ const ColumnarVisualizer: Component<ColumnarVisualizerProps> = (props) => {
     dimmedEdges: new Set()
   });
 
-  // Transform screen coordinates to world coordinates
-  const screenToWorld = (screenPoint: Point): Point => {
-    return {
-      x: (screenPoint.x - transform.x) / transform.scale,
-      y: (screenPoint.y - transform.y) / transform.scale
-    };
-  };
 
-  // Transform world coordinates to screen coordinates
-  const worldToScreen = (worldPoint: Point): Point => {
-    return {
-      x: worldPoint.x * transform.scale + transform.x,
-      y: worldPoint.y * transform.scale + transform.y
-    };
-  };
-
-  // Get mouse position relative to canvas
-  const getMousePos = (e: MouseEvent): Point => {
-    if (!canvasRef) return { x: 0, y: 0 };
-    const rect = canvasRef.getBoundingClientRect();
-    return {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    };
-  };
 
   // Find node at given world position
   const getNodeAtPosition = (worldPos: Point): GraphNode | null => {
@@ -194,7 +175,7 @@ const ColumnarVisualizer: Component<ColumnarVisualizerProps> = (props) => {
   const renderNode = (ctx: CanvasRenderingContext2D, node: GraphNode) => {
     if (!canvasRef) return;
 
-    const screenPos = worldToScreen(node.position);
+    const screenPos = worldToScreen(node.position, transform);
     const baseSize = node.size || 50;
     const radius = (baseSize / 2) * transform.scale;
 
@@ -209,25 +190,20 @@ const ColumnarVisualizer: Component<ColumnarVisualizerProps> = (props) => {
     const isHighlighted = state.highlightedNodes.has(node.id);
     const isDimmed = state.dimmedNodes.has(node.id);
 
-    // Determine colors based on state
-    let fillColor = node.color || '#6b7280';
-    let strokeColor = 'rgba(0, 0, 0, 0.2)';
+    // Determine colors based on state and theme
+    const colors = getThemeColors();
+    let fillColor = node.color || colors.primaryColor;
+    let strokeColor = colors.textMuted;
     let strokeWidth = 2;
     let currentRadius = radius;
 
     if (isDimmed) {
       // Dim the node
-      fillColor = fillColor.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/, 'rgba($1, $2, $3, 0.2)');
-      fillColor = fillColor.replace(/#([0-9a-f]{6})/i, (match, hex) => {
-        const r = parseInt(hex.substr(0, 2), 16);
-        const g = parseInt(hex.substr(2, 2), 16);
-        const b = parseInt(hex.substr(4, 2), 16);
-        return `rgba(${r}, ${g}, ${b}, 0.2)`;
-      });
+      fillColor = colors.textMuted;
     } else if (isHighlighted) {
       // Highlight the node
       currentRadius *= 1.2;
-      strokeColor = '#f59e0b';
+      strokeColor = colors.warningColor;
       strokeWidth = 4;
       
       // Add glow effect
@@ -279,9 +255,10 @@ const ColumnarVisualizer: Component<ColumnarVisualizerProps> = (props) => {
     ctx.shadowColor = 'transparent';
     ctx.shadowBlur = 0;
 
-    // Draw node label
+    // Draw node label with theme-aware colors
     if (transform.scale > 0.4 && node.label) {
-      ctx.fillStyle = isDimmed ? 'rgba(55, 65, 81, 0.3)' : '#374151';
+      const colors = getThemeColors();
+      ctx.fillStyle = isDimmed ? colors.textMuted : colors.textInverse;
       const fontSize = node.metadata.columnType === 'header' ? 14 : 12;
       ctx.font = `${Math.max(fontSize, fontSize * transform.scale)}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
       ctx.textAlign = 'center';
@@ -654,7 +631,9 @@ const ColumnarVisualizer: Component<ColumnarVisualizerProps> = (props) => {
         width: '100%',
         height: '100%',
         cursor: 'grab',
-        'background-color': '#fafafa'
+        'background-color': 'var(--background-canvas)',
+        'background-image': 'radial-gradient(circle at 1px 1px, var(--border-secondary) 1px, transparent 0)',
+        'background-size': '20px 20px'
       }}
     >
       Your browser does not support the HTML5 canvas element.

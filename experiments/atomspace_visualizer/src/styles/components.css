@@ -26,40 +26,81 @@
   cursor: grabbing;
 }
 
-/* Base UI card styling */
+/* Enhanced Base UI Card Styling with Glass Morphism */
 .ui-card {
   position: absolute;
   background: var(--card-bg);
+  backdrop-filter: var(--backdrop-blur);
   border: 1px solid var(--card-border);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   box-shadow: var(--card-shadow);
-  backdrop-filter: blur(10px);
   z-index: 1000;
-  padding: 12px;
+  padding: 16px;
   color: var(--text-primary);
   font-size: 14px;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+  animation: cascadeIn var(--animation-speed-slow) var(--animation-elastic);
+  
+  /* Animated gradient border */
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    background: linear-gradient(45deg, 
+      rgba(102, 126, 234, 0.6), 
+      rgba(240, 147, 251, 0.4), 
+      rgba(79, 172, 254, 0.6));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+    animation: rotateHue 6s linear infinite;
+    z-index: -1;
+  }
+  
+  &:hover {
+    background: var(--card-bg-hover);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--card-border-hover);
+    transform: translateY(-3px) scale(1.02);
+    animation: breathe 2s ease-in-out infinite;
+  }
 }
 
-/* Floating UI component positions */
+/* Enhanced Floating UI Component Positions with Cascade Animations */
 .top-left {
   top: 20px;
   left: 20px;
+  animation: slideInFromLeft var(--animation-speed-slow) var(--animation-elastic);
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
 }
 
 .top-center {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
+  animation: cascadeIn var(--animation-speed-slow) var(--animation-bounce);
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
 }
 
 .top-right {
   top: 20px;
   right: 20px;
+  animation: slideInFromRight var(--animation-speed-slow) var(--animation-elastic);
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
 }
 
 .top-right-secondary {
   top: 20px;
   right: 80px;
+  animation: slideInFromRight var(--animation-speed-slow) var(--animation-elastic);
+  animation-delay: 0.4s;
+  animation-fill-mode: both;
 }
 
 .bottom-center-mining {

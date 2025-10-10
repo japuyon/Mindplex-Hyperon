@@ -19,6 +19,8 @@ export interface ChatInterfaceProps {
   miningResults?: Array<{ pattern: string; support: string }>;
   conjunctSize?: number;
   onMiningStart?: (conjunctSize: number) => void;
+  isVisible?: boolean;
+  onClose?: () => void;
 }
 
 const ChatInterface = (props: ChatInterfaceProps) => {
@@ -290,7 +292,7 @@ const ChatInterface = (props: ChatInterfaceProps) => {
 
   return (
     <>
-      {/* Chat Interface - Always Visible */}
+      {/* Chat Interface */}
       <div class={`chat-interface ${isMinimized() ? 'minimized' : ''}`}>
           <div class="chat-header" onClick={() => setIsMinimized(!isMinimized())} style={{ cursor: 'pointer' }}>
             <div class="chat-header-left">

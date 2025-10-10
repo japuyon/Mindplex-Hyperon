@@ -2,6 +2,7 @@
 import { render } from 'solid-js/web';
 
 import './index.css';
+import './styles/tokens.css';
 import AppColumnar from './AppColumnar';
 
 const root = document.getElementById('root');

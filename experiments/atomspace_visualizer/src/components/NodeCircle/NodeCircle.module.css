@@ -1,0 +1,360 @@
+/* NodeCircle Component Styles */
+.nodeCircle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--duration-fast) var(--ease-bounce);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Background glow ring */
+.glowRing {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(var(--node-color-rgb, 102, 126, 234), 0.3) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+  z-index: -1;
+}
+
+/* Main circle content */
+.circleContent {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  border: 2px solid var(--border-glass);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all var(--animation-speed-fast) var(--animation-smooth);
+}
+
+/* Animated border */
+.animatedBorder {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.4) 25%, 
+    transparent 50%, 
+    rgba(255, 255, 255, 0.4) 75%, 
+    transparent 100%);
+  background-size: 200% 200%;
+  opacity: 0;
+  animation: borderRotate 3s linear infinite;
+  mask: radial-gradient(circle, transparent 60%, black 62%, black 100%);
+  -webkit-mask: radial-gradient(circle, transparent 60%, black 62%, black 100%);
+  transition: opacity var(--animation-speed-normal) var(--animation-smooth);
+  z-index: -1;
+}
+
+/* Text container with smart sizing */
+.textContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 85%;
+  height: 85%;
+  text-align: center;
+  z-index: 2;
+}
+
+.mainText {
+  font-size: clamp(10px, 2.5vw, 14px);
+  font-weight: 600;
+  color: var(--text-inverse);
+  text-shadow: var(--shadow-sm);
+  word-break: break-word;
+  hyphens: auto;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Tooltip for full text */
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.tooltipContent {
+  background: var(--surface-glass);
+  backdrop-filter: var(--blur-md);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-primary);
+  white-space: nowrap;
+  max-width: 200px;
+  box-shadow: var(--shadow-lg);
+  
+  /* Tooltip arrow */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--card-border);
+  }
+}
+
+/* Ripple effect */
+.rippleEffect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Interactive particles */
+.particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+}
+
+.particles.active .particle {
+  opacity: 0.8;
+  animation: particleOrbit 2s ease-in-out infinite;
+}
+
+.particle1 {
+  top: 0;
+  left: 50%;
+  animation-delay: 0s;
+}
+
+.particle2 {
+  top: 50%;
+  right: 0;
+  animation-delay: 0.5s;
+}
+
+.particle3 {
+  bottom: 0;
+  left: 50%;
+  animation-delay: 1s;
+}
+
+.particle4 {
+  top: 50%;
+  left: 0;
+  animation-delay: 1.5s;
+}
+
+/* Selection indicator */
+.selectionIndicator {
+  position: absolute;
+  top: -15%;
+  left: -15%;
+  width: 130%;
+  height: 130%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pulseRing {
+  width: 100%;
+  height: 100%;
+  border: 3px solid var(--glow-accent);
+  border-radius: 50%;
+  animation: selectionPulse 2s ease-in-out infinite;
+  box-shadow: var(--glow-accent);
+}
+
+/* Hover and interaction states */
+.nodeCircle:hover .glowRing {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.nodeCircle:hover .animatedBorder {
+  opacity: 1;
+}
+
+.nodeCircle:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.nodeCircle.hovered {
+  transform: scale(1.05) translateZ(0);
+}
+
+.nodeCircle.hovered .circleContent {
+  box-shadow: var(--node-shadow), var(--glow-primary);
+  transform: translateY(-2px);
+}
+
+.nodeCircle.pressed {
+  transform: scale(0.95) translateZ(0);
+}
+
+.nodeCircle.pressed .rippleEffect {
+  animation: rippleExpand 0.6s ease-out;
+}
+
+.nodeCircle.highlighted {
+  animation: highlightBounce 2s ease-in-out infinite;
+}
+
+.nodeCircle.highlighted .circleContent {
+  box-shadow: var(--node-shadow), var(--glow-accent);
+}
+
+/* Keyframe Animations */
+@keyframes borderRotate {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes particleOrbit {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+@keyframes selectionPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes rippleExpand {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes highlightBounce {
+  0%, 100% {
+    transform: scale(1.05);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive sizing */
+@media (max-width: 768px) {
+  .mainText {
+    font-size: clamp(8px, 2vw, 12px);
+  }
+  
+  .tooltipContent {
+    font-size: 11px;
+    padding: 6px 10px;
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainText {
+    font-size: clamp(7px, 1.8vw, 10px);
+  }
+  
+  .tooltipContent {
+    font-size: 10px;
+    padding: 4px 8px;
+    max-width: 120px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .nodeCircle,
+  .animatedBorder,
+  .particle,
+  .pulseRing {
+    animation: none !important;
+    transition-duration: 0.1ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .circleContent {
+    border-width: 3px;
+  }
+  
+  .mainText {
+    font-weight: 700;
+    text-shadow: 0 0 2px black, 0 0 2px black;
+  }
+}

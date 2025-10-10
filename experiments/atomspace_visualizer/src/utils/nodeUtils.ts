@@ -104,3 +104,45 @@ export function getEdgeColor(predicate: string): string {
   const hue = (Math.abs(hash) + 180) % 360; // Offset to differentiate from nodes
   return `hsla(${hue}, 60%, 65%, 0.6)`;
 }
+
+// Node interaction utilities for canvas visualization
+import { Point } from '../types';
+
+// Find node at a given world position
+export const getNodeAtPosition = (worldPos: Point, nodes: GraphNode[]): GraphNode | null => {
+  for (const node of nodes) {
+    const nodeSize = (node.size || 50) / 2;
+    const dx = worldPos.x - node.position.x;
+    const dy = worldPos.y - node.position.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    if (distance <= nodeSize) {
+      return node;
+    }
+  }
+  return null;
+};
+
+// Get all nodes within a rectangular selection area
+export const getNodesInSelection = (
+  startPos: Point, 
+  endPos: Point, 
+  nodes: GraphNode[]
+): GraphNode[] => {
+  const minX = Math.min(startPos.x, endPos.x);
+  const maxX = Math.max(startPos.x, endPos.x);
+  const minY = Math.min(startPos.y, endPos.y);
+  const maxY = Math.max(startPos.y, endPos.y);
+  
+  return nodes.filter(node => 
+    node.position.x >= minX && node.position.x <= maxX &&
+    node.position.y >= minY && node.position.y <= maxY
+  );
+};
+
+// Calculate distance between two nodes
+export const getNodeDistance = (nodeA: GraphNode, nodeB: GraphNode): number => {
+  const dx = nodeA.position.x - nodeB.position.x;
+  const dy = nodeA.position.y - nodeB.position.y;
+  return Math.sqrt(dx * dx + dy * dy);
+};

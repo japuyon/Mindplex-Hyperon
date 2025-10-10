@@ -1,6 +1,7 @@
 // Graph Visualizer component - canvas-based graph rendering
-import { Component, onMount, createEffect, onCleanup } from 'solid-js';
+import { Component, createSignal, onMount, onCleanup, createEffect, For } from 'solid-js';
 import { GraphData, GraphNode, GraphEdge, Point } from '../../types';
+import NodeCircle from '../NodeCircle/NodeCircle';
 
 export interface GraphVisualizerProps {
   graphData: GraphData;
@@ -296,15 +297,8 @@ const GraphVisualizer: Component<GraphVisualizerProps> = (props) => {
     // Render edges first (so they appear behind nodes)
     props.graphData.edges.forEach(edge => renderEdge(ctx, edge));
     
-    // Render nodes with z-order management (selected and dragged nodes on top)
-    const regularNodes = props.graphData.nodes.filter(n => n !== selectedNode && n !== draggedNode);
-    const priorityNodes = props.graphData.nodes.filter(n => n === selectedNode || n === draggedNode);
-    
-    // Render regular nodes first
-    regularNodes.forEach(node => renderNode(ctx, node));
-    
-    // Render priority nodes on top
-    priorityNodes.forEach(node => renderNode(ctx, node));
+    // Note: Node rendering is now handled by NodeCircle components in the SVG overlay
+    // Canvas only renders edges and background elements
   };
 
   // Draw subtle background grid
@@ -688,23 +682,65 @@ const GraphVisualizer: Component<GraphVisualizerProps> = (props) => {
   });
 
   return (
-    <canvas 
-      ref={el => canvasRef = el as HTMLCanvasElement}
-      id="graph-canvas"
-      style={{
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        width: '100vw',
-        height: '100vh',
-        cursor: 'grab',
-        'background-color': 'var(--bg-primary)',
-        'background-image': 'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.02) 1px, transparent 0)',
-        'background-size': '20px 20px'
-      }}
-    >
-      Your browser does not support the HTML5 canvas element.
-    </canvas>
+    <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+      <canvas 
+        ref={el => canvasRef = el as HTMLCanvasElement}
+        id="graph-canvas"
+        style={{
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100vw',
+          height: '100vh',
+          cursor: 'grab',
+          'background-color': 'var(--background-canvas)',
+          'background-image': 'radial-gradient(circle at 1px 1px, var(--border-secondary) 1px, transparent 0)',
+          'background-size': '20px 20px'
+        }}
+      >
+        Your browser does not support the HTML5 canvas element.
+      </canvas>
+      
+      {/* SVG Overlay for NodeCircle components */}
+      <svg
+        style={{
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          width: '100vw',
+          height: '100vh',
+          'pointer-events': 'none',
+          'z-index': '1'
+        }}
+      >
+        <For each={props.graphData?.nodes || []}>
+          {(node) => {
+            const screenPos = worldToScreen(node.position);
+            const radius = (node.size || 40) * transform.scale;
+            
+            return (
+              <foreignObject
+                x={screenPos.x - radius}
+                y={screenPos.y - radius}
+                width={radius * 2}
+                height={radius * 2}
+                style={{ 'pointer-events': 'auto' }}
+              >
+                <NodeCircle
+                  text={node.label || node.id}
+                  size={radius * 2}
+                  color={getNodeColor(node)}
+                  className={`node-${node.type || 'default'}`}
+                  onClick={() => props.onNodeSelect(node)}
+                  onHover={(hovered) => { hoveredNode = hovered ? node : null; }}
+                  isHighlighted={selectedNode?.id === node.id}
+                />
+              </foreignObject>
+            );
+          }}
+        </For>
+      </svg>
+    </div>
   );
 };
 

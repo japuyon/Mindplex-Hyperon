@@ -1,31 +1,263 @@
-/* CSS Variables matching template.html design */
+/* Enhanced CSS Variables with Animation System */
 :root {
-  /* Color Palette - Light Theme */
-  --bg-primary: #fafafa;
-  --bg-secondary: rgba(255, 255, 255, 0.9);
-  --border-light: rgba(0, 0, 0, 0.1);
-  --text-primary: #374151;
-  --text-secondary: #6b7280;
+  /* Color Palette - Animated Gradient Theme */
+  --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+  --bg-secondary: rgba(255, 255, 255, 0.95);
+  --bg-tertiary: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+  --border-light: rgba(255, 255, 255, 0.3);
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --text-glow: rgba(102, 126, 234, 0.8);
   
-  /* Node Colors */
-  --node-default: rgba(59, 130, 246, 0.7);
-  --node-anchor: rgba(239, 68, 68, 0.8);
-  --node-border: rgba(0, 0, 0, 0.3);
+  /* Enhanced Node Colors with Gradients */
+  --node-default: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --node-anchor: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --node-special: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --node-border: rgba(255, 255, 255, 0.6);
+  --node-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
   
-  /* Edge Colors */
-  --edge-default: rgba(107, 114, 128, 0.6);
-  --edge-hover: rgba(59, 130, 246, 0.8);
+  /* Edge Colors with Glow */
+  --edge-default: rgba(107, 114, 128, 0.4);
+  --edge-hover: rgba(102, 126, 234, 0.8);
+  --edge-glow: 0 0 20px rgba(102, 126, 234, 0.6);
   
-  /* UI Elements */
-  --card-bg: rgba(255, 255, 255, 0.95);
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --card-border: rgba(0, 0, 0, 0.1);
-  --border-radius: 8px;
+  /* UI Elements with Glass Morphism */
+  --card-bg: rgba(255, 255, 255, 0.25);
+  --card-bg-hover: rgba(255, 255, 255, 0.35);
+  --card-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  --card-shadow-hover: 0 12px 40px rgba(31, 38, 135, 0.5);
+  --card-border: rgba(255, 255, 255, 0.18);
+  --card-border-hover: rgba(255, 255, 255, 0.3);
+  --border-radius: 16px;
+  --backdrop-blur: blur(20px);
   
-  /* Grid Colors */
-  --grid-minor: rgba(0, 0, 0, 0.03);
-  --grid-major: rgba(0, 0, 0, 0.08);
-  --grid-axis: rgba(59, 130, 246, 0.15);
-  --grid-dots: rgba(0, 0, 0, 0.1);
-  --grid-center: rgba(59, 130, 246, 0.2);
+  /* Grid Colors with Animation */
+  --grid-minor: rgba(255, 255, 255, 0.1);
+  --grid-major: rgba(255, 255, 255, 0.15);
+  --grid-axis: rgba(102, 126, 234, 0.3);
+  --grid-dots: rgba(255, 255, 255, 0.2);
+  --grid-center: rgba(102, 126, 234, 0.4);
+  
+  /* Animation Variables */
+  --animation-speed-fast: 0.3s;
+  --animation-speed-normal: 0.6s;
+  --animation-speed-slow: 1.2s;
+  --animation-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --animation-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Glow and Particle Effects */
+  --glow-primary: 0 0 20px rgba(102, 126, 234, 0.6);
+  --glow-secondary: 0 0 30px rgba(240, 147, 251, 0.6);
+  --glow-accent: 0 0 25px rgba(79, 172, 254, 0.6);
+  --particle-trail: rgba(102, 126, 234, 0.3);
+}
+
+/* Advanced Animation Keyframes */
+@keyframes morphBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-20px) scale(1.02); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { 
+    box-shadow: var(--glow-primary);
+    filter: brightness(1);
+  }
+  50% { 
+    box-shadow: var(--glow-primary), var(--glow-secondary);
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes cascadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.8) rotateX(-10deg);
+    filter: blur(10px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(5px) scale(1.05) rotateX(2deg);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px) rotateY(-15deg);
+    filter: blur(8px);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translateX(10px) rotateY(2deg);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px) rotateY(15deg);
+    filter: blur(8px);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translateX(-10px) rotateY(-2deg);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes scaleInBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-10deg);
+    filter: blur(10px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(2deg);
+    filter: blur(3px);
+  }
+  70% {
+    opacity: 0.9;
+    transform: scale(0.95) rotate(-1deg);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: blur(0px);
+  }
+}
+
+@keyframes particleFloat {
+  0% { 
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+    opacity: 0.8;
+  }
+  33% { 
+    transform: translateY(-15px) translateX(10px) rotate(120deg);
+    opacity: 1;
+  }
+  66% { 
+    transform: translateY(-5px) translateX(-8px) rotate(240deg);
+    opacity: 0.9;
+  }
+  100% { 
+    transform: translateY(0px) translateX(0px) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmerEffect {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes rotateHue {
+  0% { filter: hue-rotate(0deg) saturate(1); }
+  25% { filter: hue-rotate(90deg) saturate(1.2); }
+  50% { filter: hue-rotate(180deg) saturate(1.4); }
+  75% { filter: hue-rotate(270deg) saturate(1.2); }
+  100% { filter: hue-rotate(360deg) saturate(1); }
+}
+
+@keyframes breathe {
+  0%, 100% { 
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scale(1.02);
+    filter: brightness(1.05);
+  }
+}
+
+@keyframes liquidMove {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: rotate(0deg);
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    transform: rotate(180deg);
+  }
+}
+
+/* Staggered Animation Delays for Cascading Effect */
+.cascade-delay-1 { animation-delay: 0.1s; }
+.cascade-delay-2 { animation-delay: 0.2s; }
+.cascade-delay-3 { animation-delay: 0.3s; }
+.cascade-delay-4 { animation-delay: 0.4s; }
+.cascade-delay-5 { animation-delay: 0.5s; }
+.cascade-delay-6 { animation-delay: 0.6s; }
+
+/* Dark Theme Variables */
+:root.dark-theme {
+  /* Dark Color Palette */
+  --bg-primary: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+  --bg-secondary: rgba(15, 15, 35, 0.95);
+  --bg-tertiary: linear-gradient(45deg, #2d1b69 0%, #11998e 50%, #38ef7d 100%);
+  --border-light: rgba(255, 255, 255, 0.1);
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-glow: rgba(139, 92, 246, 0.8);
+  
+  /* Dark Node Colors */
+  --node-default: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  --node-anchor: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  --node-special: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  --node-border: rgba(255, 255, 255, 0.3);
+  --node-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+  
+  /* Dark UI Elements */
+  --card-bg: rgba(15, 23, 42, 0.8);
+  --card-bg-hover: rgba(30, 41, 59, 0.9);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --card-shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.8);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-border-hover: rgba(255, 255, 255, 0.2);
+  
+  /* Dark Glow Effects */
+  --glow-primary: 0 0 20px rgba(139, 92, 246, 0.6);
+  --glow-secondary: 0 0 30px rgba(236, 72, 153, 0.6);
+  --glow-accent: 0 0 25px rgba(6, 182, 212, 0.6);
 }

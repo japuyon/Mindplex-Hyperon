@@ -1,0 +1,317 @@
+/* DarkModeToggle Component Styles */
+.themeToggle {
+  position: fixed;
+  top: var(--space-5);
+  right: var(--space-5);
+  width: var(--space-14);
+  height: var(--space-14);
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  transition: all var(--duration-fast) var(--ease-bounce);
+  background: var(--surface-glass);
+  backdrop-filter: var(--blur-lg);
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
+  
+  /* Ensure proper layering */
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.themeToggle:hover {
+  transform: scale(1.1) translateZ(0);
+  box-shadow: var(--shadow-lg);
+  background: var(--surface-elevated);
+}
+
+.themeToggle:active {
+  transform: scale(1.05) translateZ(0);
+}
+
+.themeToggle.light {
+  color: #f59e0b;
+}
+
+.themeToggle.dark {
+  color: #8b5cf6;
+}
+
+/* Orbital rings animation */
+.orbitalRings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.2;
+  animation: orbital 8s linear infinite;
+}
+
+.ring1 {
+  width: 70px;
+  height: 70px;
+  margin: -35px 0 0 -35px;
+  animation-duration: 8s;
+}
+
+.ring2 {
+  width: 90px;
+  height: 90px;
+  margin: -45px 0 0 -45px;
+  animation-duration: 12s;
+  animation-direction: reverse;
+}
+
+.ring3 {
+  width: 110px;
+  height: 110px;
+  margin: -55px 0 0 -55px;
+  animation-duration: 16s;
+}
+
+/* Icon container */
+.iconContainer {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  z-index: 2;
+}
+
+.iconContainer.hovered {
+  animation: iconBounce 0.6s var(--animation-bounce);
+}
+
+/* Sun and Moon icons */
+.sunIcon,
+.moonIcon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+}
+
+.sunIcon.active {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.moonIcon.active {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.sunIcon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.6));
+  animation: sunRotate 20s linear infinite;
+}
+
+.moonIcon svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.6));
+}
+
+/* Interactive particles */
+.particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+}
+
+.particles.active .particle {
+  opacity: 0.6;
+  animation: particleOrbit 2s ease-in-out infinite;
+}
+
+.particle1 {
+  top: 10px;
+  left: 50%;
+  animation-delay: 0s;
+}
+
+.particle2 {
+  top: 50%;
+  right: 10px;
+  animation-delay: 0.5s;
+}
+
+.particle3 {
+  bottom: 10px;
+  left: 50%;
+  animation-delay: 1s;
+}
+
+.particle4 {
+  top: 50%;
+  left: 10px;
+  animation-delay: 1.5s;
+}
+
+/* Glow effects */
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: -1;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+}
+
+.sunGlow {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, transparent 70%);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+}
+
+.moonGlow {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+}
+
+/* Keyframe Animations */
+@keyframes orbital {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes sunRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes particleOrbit {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .themeToggle {
+    top: 15px;
+    right: 15px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .iconContainer {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ring1 {
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 -30px;
+  }
+
+  .ring2 {
+    width: 75px;
+    height: 75px;
+    margin: -37.5px 0 0 -37.5px;
+  }
+
+  .ring3 {
+    width: 90px;
+    height: 90px;
+    margin: -45px 0 0 -45px;
+  }
+
+  .particles {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .themeToggle {
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .iconContainer {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Accessibility */
+.themeToggle:focus {
+  outline: none;
+  box-shadow: var(--card-shadow-hover), 0 0 0 3px rgba(102, 126, 234, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .themeToggle,
+  .ring,
+  .sunIcon svg,
+  .particle,
+  .glow {
+    animation: none !important;
+    transition-duration: 0.1ms !important;
+  }
+}

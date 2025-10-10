@@ -1,9 +1,46 @@
 .canvas {
-  transition: opacity 0.2s ease-in-out;
-  min-width: 150%;
-  min-height: 150%;
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
+  width: 100vw;
+  height: 100vh;
+  cursor: grab;
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+  /* Animated background grid */
+  background-image: 
+    radial-gradient(circle at 20px 20px, var(--grid-dots) 2px, transparent 2px);
+  background-size: 40px 40px;
+  animation: particleFloat 8s ease-in-out infinite;
+  
+  /* Glassmorphism overlay */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+      transparent 0%, 
+      rgba(102, 126, 234, 0.05) 25%, 
+      transparent 50%, 
+      rgba(240, 147, 251, 0.05) 75%, 
+      transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+    animation: morphBackground 10s ease infinite;
+  }
 }
 
 .canvas:active {
   cursor: grabbing !important;
+  transform: scale(1.02);
+  box-shadow: var(--glow-primary);
+}
+
+.canvas:hover {
+  background-image: 
+    radial-gradient(circle at 20px 20px, var(--grid-center) 2px, transparent 2px);
+  transition: background-image var(--animation-speed-fast) ease;
 }

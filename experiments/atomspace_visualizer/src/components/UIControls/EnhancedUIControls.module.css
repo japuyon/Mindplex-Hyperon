@@ -2,14 +2,45 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  width: 340px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--card-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  width: 380px;
+  border: 1px solid var(--card-border);
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
   z-index: 999;
+  animation: slideInFromRight var(--animation-speed-slow) var(--animation-elastic);
+  
+  /* Floating animation with delay */
+  animation: slideInFromRight var(--animation-speed-slow) var(--animation-elastic), 
+             floatUpDown 6s ease-in-out infinite 3s;
+  
+  /* Liquid morphing border */
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    background: linear-gradient(45deg, 
+      rgba(102, 126, 234, 0.8), 
+      rgba(240, 147, 251, 0.6), 
+      rgba(79, 172, 254, 0.8));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+    animation: liquidMove 6s ease-in-out infinite;
+    z-index: -1;
+  }
+  
+  &:hover {
+    background: var(--card-bg-hover);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px) scale(1.02);
+    animation: breathe 2s ease-in-out infinite;
+  }
 }
 
 .controlsHeader {
@@ -90,28 +121,54 @@
 .controlButton {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  gap: 12px;
+  background: var(--node-default);
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 12px 20px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  font-size: 14px;
+  font-weight: 600;
+  transition: all var(--animation-speed-fast) var(--animation-bounce);
+  box-shadow: var(--glow-primary);
+  position: relative;
+  overflow: hidden;
+  
+  /* Shimmer effect overlay */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -200%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.4), 
+      transparent
+    );
+    transition: left var(--animation-speed-normal) ease;
+  }
+  
+  /* Liquid morphing shape */
+  animation: liquidMove 5s ease-in-out infinite;
 }
 
 .controlButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #5568d3 0%, #6a3f91 100%);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--glow-primary), var(--glow-secondary);
+  animation: pulseGlow 2s ease-in-out infinite;
+  
+  &::before {
+    left: 100%;
+  }
 }
 
 .controlButton:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--glow-primary);
 }
 
 .controlButton span {

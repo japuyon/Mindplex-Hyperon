@@ -1,16 +1,19 @@
 import type { Component } from 'solid-js';
-import { createSignal, createEffect, createResource } from 'solid-js';
+import { createSignal, createEffect, createResource, For } from 'solid-js';
 
 import ColumnarVisualizer from './components/ColumnarVisualizer/ColumnarVisualizer';
 import EnhancedLegend from './components/Legend/EnhancedLegend';
 import MiningInterface from './components/MiningInterface/MiningInterface';
 import ChatInterface from './components/ChatInterface/ChatInterface';
+import ChatToggle from './components/ChatToggle/ChatToggle';
+import DarkModeToggle from './components/DarkModeToggle/DarkModeToggle';
 import { GraphData, GraphNode, FilterState } from './types';
 import { MettaParserImpl } from './services/parser/MettaParser';
 import { ColumnarTransformer } from './services/graph/ColumnarTransformer';
 
 import './styles/variables.css';
 import './styles/components.css';
+import './styles/special-effects.css';
 import styles from './AppColumnar.module.css';
 
 const App: Component = () => {
@@ -65,6 +68,11 @@ const App: Component = () => {
   // Mining and chat state
   const [miningResults, setMiningResults] = createSignal<Array<{ pattern: string; support: string }>>([]);
   const [currentConjunctSize, setCurrentConjunctSize] = createSignal<number | undefined>(undefined);
+  const [isChatOpen, setIsChatOpen] = createSignal(false);
+  const [hasNewMessages, setHasNewMessages] = createSignal(false);
+  
+  // Theme state
+  const [isDarkMode, setIsDarkMode] = createSignal(false);
   
   // Animation state
   let animationInterval: number | undefined;
@@ -194,6 +202,21 @@ const App: Component = () => {
       console.log('AppColumnar.tsx setting currentConjunctSize to:', conjunctSize);
       setCurrentConjunctSize(conjunctSize);
     }
+    
+    // Auto-open chat and show new messages indicator
+    setIsChatOpen(true);
+    setHasNewMessages(true);
+  };
+
+  const handleChatToggle = () => {
+    setIsChatOpen(!isChatOpen());
+    if (isChatOpen()) {
+      setHasNewMessages(false);
+    }
+  };
+
+  const handleThemeToggle = (isDark: boolean) => {
+    setIsDarkMode(isDark);
   };
 
   const startMiningAnimation = () => {
@@ -274,11 +297,27 @@ const App: Component = () => {
 
   return (
     <div class={styles.app}>
+      {/* Floating Particle System */}
+      <div class="particle-system">
+        <For each={Array.from({ length: 30 }, (_, i) => i)}>
+          {(i: number) => (
+            <div 
+              class="particle gpu-accelerated" 
+              style={{
+                left: `${Math.random() * 100}%`,
+                'animation-delay': `${Math.random() * 8}s`,
+                'animation-duration': `${8 + Math.random() * 6}s`
+              }}
+            />
+          )}
+        </For>
+      </div>
+
       {/* Scrollable graph container */}
       <div class={styles.graphContainer}>
-        <div class={styles.graphCard}>
+        <div class={`${styles.graphCard} ripple-container gpu-accelerated`}>
           {/* Canvas Control Buttons - Top of Canvas */}
-          <div class={styles.canvasControls}>
+          <div class={`${styles.canvasControls} neon-border`}>
             <button class={styles.controlBtn} onClick={handleZoomIn} title="Zoom In">
               🔍+
             </button>
@@ -300,24 +339,40 @@ const App: Component = () => {
       </div>
 
       {/* Enhanced Legend - Top Right */}
-      <EnhancedLegend
-        graphData={graphData()}
-        onFilterChange={handleFilterChange}
-        filterState={filterState()}
-      />
+      <div class="cascade-delay-1">
+        <EnhancedLegend
+          graphData={graphData()}
+          onFilterChange={handleFilterChange}
+          filterState={filterState()}
+        />
+      </div>
 
       {/* Mining Interface - Below Legend (with chat integration) */}
-      <MiningInterface
-        onPatternsFound={handlePatternsFound}
-        onMiningStart={handleMiningStart}
+      <div class="cascade-delay-2">
+        <MiningInterface
+          onPatternsFound={handlePatternsFound}
+          onMiningStart={handleMiningStart}
+        />
+      </div>
+
+      {/* Chat Interface - Conditionally rendered with slide animation */}
+      {isChatOpen() && (
+        <ChatInterface
+          conjunctSize={currentConjunctSize()}
+          onVisualize={handleVisualize}
+          miningResults={miningResults()}
+        />
+      )}
+
+      {/* Chat Toggle Button - Bottom Right */}
+      <ChatToggle
+        isOpen={isChatOpen()}
+        onClick={handleChatToggle}
+        hasNewMessages={hasNewMessages()}
       />
 
-      {/* Chat Interface - Opens automatically when mining completes */}
-      <ChatInterface
-        conjunctSize={currentConjunctSize()}
-        onVisualize={handleVisualize}
-        miningResults={miningResults()}
-      />
+      {/* Dark Mode Toggle - Top Right */}
+      <DarkModeToggle onToggle={handleThemeToggle} />
     </div>
   );
 };

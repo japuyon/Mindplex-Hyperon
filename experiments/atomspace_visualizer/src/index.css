@@ -18,12 +18,22 @@ body {
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: var(--bg-primary);
+  background: var(--bg-primary);
+  background-size: 400% 400%;
   color: var(--text-primary);
   overflow: hidden; /* Prevent scrollbars on the main body */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   width: 100vw;
   height: 100vh;
+  animation: morphBackground 12s ease infinite;
+  
+  /* Smooth font rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  /* Enhanced cursor */
+  cursor: default;
 }
 
 #root {
@@ -46,19 +56,58 @@ h1 {
 
 button {
   border-radius: var(--border-radius);
-  border: 1px solid transparent;
-  padding: 0.5rem 1rem;
+  border: 1px solid var(--card-border);
+  padding: 0.75rem 1.5rem;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s ease;
+  background: var(--card-bg);
+  backdrop-filter: var(--backdrop-blur);
+  color: var(--text-primary);
+  transition: all var(--animation-speed-fast) var(--animation-bounce);
+  position: relative;
+  overflow: hidden;
+  
+  /* Shimmer effect overlay */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.3), 
+      transparent
+    );
+    transition: left var(--animation-speed-normal) ease;
+  }
+  
+  &:hover {
+    background: var(--card-bg-hover);
+    border-color: var(--card-border-hover);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: var(--glow-primary);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0) scale(1.02);
+    box-shadow: var(--card-shadow);
+  }
 }
 
 button:focus,
 button:focus-visible {
-  outline: 2px solid rgba(59, 130, 246, 0.5);
+  outline: 2px solid var(--text-glow);
   outline-offset: 2px;
+  box-shadow: var(--glow-primary);
 }
 
 code {

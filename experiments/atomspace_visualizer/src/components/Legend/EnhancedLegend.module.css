@@ -2,16 +2,47 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  width: 340px;
-  max-height: 50vh;
+  background: var(--card-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  width: 380px;
+  max-height: 300px;
   overflow-y: auto;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--card-border);
+  transition: all var(--animation-speed-normal) var(--animation-smooth);
   z-index: 998;
+  animation: slideInFromRight var(--animation-speed-slow) var(--animation-elastic);
+  
+  /* Floating animation */
+  animation: slideInFromRight var(--animation-speed-slow) var(--animation-elastic), 
+             floatUpDown 5s ease-in-out infinite 2s;
+  
+  /* Animated gradient border */
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    padding: 2px;
+    background: linear-gradient(45deg, 
+      rgba(102, 126, 234, 0.8), 
+      rgba(240, 147, 251, 0.6), 
+      rgba(79, 172, 254, 0.8));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+    animation: rotateHue 4s linear infinite;
+    z-index: -1;
+  }
+  
+  &:hover {
+    background: var(--card-bg-hover);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px) scale(1.02);
+    animation: breathe 2s ease-in-out infinite;
+  }
 }
 
 .legendHeader {
@@ -152,30 +183,55 @@
 }
 
 .filterButton {
-  background: #f3f4f6;
-  border: 1px solid #d1d5db;
-  padding: 6px 12px;
-  border-radius: 6px;
+  background: var(--card-bg);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--card-border);
+  padding: 8px 16px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
-  color: #374151;
-  transition: all 0.2s ease;
+  color: var(--text-primary);
+  transition: all var(--animation-speed-fast) var(--animation-bounce);
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  
+  /* Shimmer effect overlay */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.3), 
+      transparent
+    );
+    transition: left var(--animation-speed-normal) ease;
+  }
 }
 
 .filterButton:hover {
-  background: #e5e7eb;
-  border-color: #9ca3af;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg-hover);
+  border-color: var(--card-border-hover);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--glow-primary);
+  
+  &::before {
+    left: 100%;
+  }
 }
 
 .filterButton.active {
-  background: #f59e0b;
+  background: var(--node-special);
   color: white;
-  border-color: #f59e0b;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: var(--glow-accent);
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
 /* Custom fancy scrollbar for legend */

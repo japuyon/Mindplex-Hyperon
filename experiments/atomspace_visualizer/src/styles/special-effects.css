@@ -1,0 +1,355 @@
+/* Special Effects and Particle Systems */
+
+/* Floating particles background overlay */
+.particle-system {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: floatParticle 8s linear infinite;
+}
+
+.particle:nth-child(2n) {
+  background: radial-gradient(circle, rgba(240, 147, 251, 0.6) 0%, transparent 70%);
+  animation-duration: 10s;
+  width: 6px;
+  height: 6px;
+}
+
+.particle:nth-child(3n) {
+  background: radial-gradient(circle, rgba(79, 172, 254, 0.7) 0%, transparent 70%);
+  animation-duration: 12s;
+  width: 3px;
+  height: 3px;
+}
+
+.particle:nth-child(4n) {
+  background: radial-gradient(circle, rgba(245, 87, 108, 0.5) 0%, transparent 70%);
+  animation-duration: 14s;
+  width: 5px;
+  height: 5px;
+}
+
+/* Hover ripple effect for interactive elements */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ripple-container:hover::after {
+  width: 300px;
+  height: 300px;
+  opacity: 1;
+}
+
+/* Glitch effect for special elements */
+.glitch-effect {
+  position: relative;
+  animation: glitchMove 4s ease-in-out infinite;
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch-effect::before {
+  animation: glitchTop 2s linear infinite;
+  color: #ff00c1;
+  z-index: -1;
+}
+
+.glitch-effect::after {
+  animation: glitchBottom 1.5s linear infinite;
+  color: #00fff9;
+  z-index: -2;
+}
+
+/* Holographic text effect */
+.holographic-text {
+  background: linear-gradient(45deg, 
+    #667eea 0%, 
+    #764ba2 25%, 
+    #f093fb 50%, 
+    #f5576c 75%, 
+    #4facfe 100%);
+  background-size: 400% 400%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: holographicShift 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
+}
+
+/* Energy beam effects */
+.energy-beam {
+  position: relative;
+  overflow: hidden;
+}
+
+.energy-beam::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(102, 126, 234, 0.8) 50%, 
+    transparent 100%);
+  animation: energyBeamSweep 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Crystalline loading effect */
+.crystal-loader {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.crystal-loader::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  animation: crystalSpin 2s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.8));
+}
+
+/* Neon glow borders */
+.neon-border {
+  position: relative;
+  border: 2px solid transparent;
+}
+
+.neon-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  padding: 2px;
+  background: linear-gradient(45deg, 
+    #ff00c1, #667eea, #00fff9, #667eea);
+  background-size: 400% 400%;
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  animation: neonPulse 3s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Matrix rain effect */
+.matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.1;
+}
+
+.matrix-column {
+  position: absolute;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #00ff41;
+  animation: matrixFall linear infinite;
+}
+
+/* Keyframe Animations */
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(100vh) translateX(0px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes glitchMove {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
+}
+
+@keyframes glitchTop {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+@keyframes glitchBottom {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(3px); }
+  50% { transform: translateX(-3px); }
+  75% { transform: translateX(2px); }
+}
+
+@keyframes holographicShift {
+  0%, 100% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: hue-rotate(90deg) drop-shadow(0 0 15px rgba(240, 147, 251, 0.7));
+  }
+}
+
+@keyframes energyBeamSweep {
+  0% { left: -100%; }
+  50% { left: 0%; }
+  100% { left: 100%; }
+}
+
+@keyframes crystalSpin {
+  0% { 
+    transform: rotate(0deg) scale(1);
+    filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.8));
+  }
+  25% { 
+    transform: rotate(90deg) scale(1.1);
+    filter: drop-shadow(0 0 15px rgba(240, 147, 251, 0.9));
+  }
+  50% { 
+    transform: rotate(180deg) scale(1);
+    filter: drop-shadow(0 0 20px rgba(79, 172, 254, 1));
+  }
+  75% { 
+    transform: rotate(270deg) scale(1.1);
+    filter: drop-shadow(0 0 15px rgba(245, 87, 108, 0.9));
+  }
+  100% { 
+    transform: rotate(360deg) scale(1);
+    filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.8));
+  }
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    background-position: 0% 50%;
+    filter: blur(0px) brightness(1);
+  }
+  25% {
+    background-position: 100% 50%;
+    filter: blur(1px) brightness(1.2);
+  }
+  50% {
+    background-position: 200% 50%;
+    filter: blur(2px) brightness(1.5);
+  }
+  75% {
+    background-position: 300% 50%;
+    filter: blur(1px) brightness(1.2);
+  }
+}
+
+@keyframes matrixFall {
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+/* Utility classes for different animation delays */
+.anim-delay-1 { animation-delay: 0.1s; }
+.anim-delay-2 { animation-delay: 0.2s; }
+.anim-delay-3 { animation-delay: 0.3s; }
+.anim-delay-4 { animation-delay: 0.4s; }
+.anim-delay-5 { animation-delay: 0.5s; }
+.anim-delay-6 { animation-delay: 0.6s; }
+.anim-delay-7 { animation-delay: 0.7s; }
+.anim-delay-8 { animation-delay: 0.8s; }
+.anim-delay-9 { animation-delay: 0.9s; }
+.anim-delay-10 { animation-delay: 1.0s; }
+
+/* Interactive hover states */
+.interactive-hover:hover {
+  animation: breathe 1s ease-in-out infinite;
+}
+
+.interactive-glow:hover {
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+.interactive-float:hover {
+  animation: floatUpDown 2s ease-in-out infinite;
+}
+
+/* Performance optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .particle,
+  .matrix-rain,
+  .energy-beam::before {
+    animation: none !important;
+  }
+}
